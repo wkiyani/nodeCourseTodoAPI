@@ -26,6 +26,8 @@ app.listen(port, () => {
 	console.log('started on port', port);
 })
 
+module.exports = {app};
+
 // var newTodo = new Todo({
 // 	text: 'Cook dinner'
 // });
