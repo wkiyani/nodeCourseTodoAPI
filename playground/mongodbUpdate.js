@@ -14,7 +14,7 @@ MongoClient.connect('mongodb://localhost:27017/TodoApp', (err, db) => {
 	// });
 
 	db.collection('Users').findOneAndUpdate({name: 'Wasif'},
-	{ $set: {name: 'Hamza'}, $inc: {age: 1}},
+	{ $set: {name: 'Hamza'}, $inc: {age: 1} },
 	{ returnOriginal: false })
 	.then((result) => {
 		console.log(result);
