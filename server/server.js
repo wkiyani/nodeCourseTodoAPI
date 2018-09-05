@@ -152,7 +152,7 @@ app.patch('/jokes/:id', (req, res) => {
 		console.log('ID not valid');
 		res.status(101).send();
 	}
-	Todo.findByIdAndUpdate(id, {$set: body}, {new:true}).then((joke) => {
+	Joke.findByIdAndUpdate(id, {$set: body}, {new: true}).then((joke) => {
 		if(!joke){
 			res.status(404).send();
 		} else {
