@@ -79,8 +79,9 @@ app.get('jokes/:id', (req, res) => {
 	Joke.findById(id).then((joke) => {
 		if(!joke){
 			res.status(404).send();
+		} else {
+			res.status(200).send({joke});	
 		}
-		res.status(200).send({joke});
 	}).catch((e) => {
 		res.status(400).send();
 	});
@@ -113,8 +114,9 @@ app.delete('jokes/:id', (req, res) => {
 	Joke.findByIdAndRemove(id).then((joke) => {
 		if(!joke){
 			res.status(400).send();
+		} else {
+			res.status(200).send({joke});
 		}
-		res.status(200).send({joke});
 	}).catch((e) => {
 		res.status(400).send();
 	});
@@ -153,8 +155,9 @@ app.patch('/jokes/:id', (req, res) => {
 	Todo.findByIdAndUpdate(id, {$set: body}, {new:true}).then((joke) => {
 		if(!joke){
 			res.status(400).send();
+		} else {
+			res.status(200).send({joke});
 		}
-		res.status(200).send({joke});
 	}).catch((e) => {
 		res.status(400).send();
 	});
