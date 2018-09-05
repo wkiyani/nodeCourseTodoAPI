@@ -27,7 +27,7 @@ app.post('/todos', (req, res) => {
 
 app.post('/jokes', (req,res) => {
 	var joke = new Joke({
-		text: req.body.text,
+		content: req.body.content,
 		funny: req.body.funny
 	});
 	joke.save().then((result) => {
@@ -145,7 +145,7 @@ app.patch('/todos/:id', (req,res) => {
 
 app.patch('/jokes/:id', (req, res) => {
 	var {id} = req.params;
-	var body = _.pick(req.body, ['text', 'funny']);
+	var body = _.pick(req.body, ['content', 'funny']);
 	if(!ObjectID.isValid(id)){
 		console.log('ID not valid');
 		res.status(404).send();
