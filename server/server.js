@@ -70,7 +70,7 @@ app.get('/todos/:id', (req, res) => {
 	});
 });
 
-app.get('jokes/:id', (req, res) => {
+app.get('/jokes/:id', (req, res) => {
 	var {id} = req.params;
 	if(!ObjectID.isValid(id)){
 		console.log('ID not valid');
@@ -105,7 +105,7 @@ app.delete('/todos/:id', (req, res) => {
 	});
 });
 
-app.delete('jokes/:id', (req, res) => {
+app.delete('/jokes/:id', (req, res) => {
 	var {id} = req.params;
 	if(!ObjectID.isValid(id)){
 		console.log('ID not valid');
@@ -131,7 +131,7 @@ app.patch('/todos/:id', (req,res) => {
 	}
 	if(_.isBoolean(body.completed) && body.completed){
 		body.completedAt = new Date().getTime();
-	} else{
+	} else {
 		body.completed = false;
 		body.completedAt = null;
 	}
