@@ -74,7 +74,7 @@ app.get('jokes/:id', (req, res) => {
 	var {id} = req.params;
 	if(!ObjectID.isValid(id)){
 		console.log('ID not valid');
-		res.status(404).send();
+		res.status(101).send();
 	}
 	Joke.findById(id).then((joke) => {
 		if(!joke){
@@ -109,7 +109,7 @@ app.delete('jokes/:id', (req, res) => {
 	var {id} = req.params;
 	if(!ObjectID.isValid(id)){
 		console.log('ID not valid');
-		res.status(404).send();
+		res.status(101).send();
 	}
 	Joke.findByIdAndRemove(id).then((joke) => {
 		if(!joke){
@@ -137,7 +137,7 @@ app.patch('/todos/:id', (req,res) => {
 	}
 	Todo.findByIdAndUpdate(id, {$set: body}, {new: true}).then((todo) =>{
 		if(!todo){
-			return res.status(400).send();
+			return res.status(404).send();
 		} 
 		res.send({todo});
 	}).catch((e) =>{
@@ -150,11 +150,11 @@ app.patch('/jokes/:id', (req, res) => {
 	var body = _.pick(req.body, ['content', 'funny']);
 	if(!ObjectID.isValid(id)){
 		console.log('ID not valid');
-		res.status(404).send();
+		res.status(101).send();
 	}
 	Todo.findByIdAndUpdate(id, {$set: body}, {new:true}).then((joke) => {
 		if(!joke){
-			res.status(400).send();
+			res.status(404).send();
 		} else {
 			res.status(200).send({joke});
 		}
