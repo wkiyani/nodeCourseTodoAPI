@@ -6,6 +6,7 @@ const {ObjectID} = require('mongodb');
 var {mongoose} = require('./db/mongoose.js');
 var {Todo} = require('./models/todo.js');
 var {User} = require('./models/user.js');
+var {Joke} = require('./models/jokes.js');
 
 var app = express();
 const port = process.env.PORT || 3000;
@@ -24,9 +25,29 @@ app.post('/todos', (req, res) => {
 	});
 });
 
+app.post('/jokes', (req,res) => {
+	var joke = new Joke({
+		text: req.body.text,
+		funny: req.body.funny
+	});
+	joke.save().then((result) => {
+		res.send(result);
+	}, (e) => {
+		res.status(400).send(e);
+	})
+});
+
 app.get('/todos', (req, res) => {
 	Todo.find().then((todos) => {
 		res.send({todos});
+	}, (e) => {
+		res.send(400).send(e);
+	});
+});
+
+app.get('/jokes', (req, res) => {
+	Joke.find().then((jokes) => {
+		res.send({jokes});
 	}, (e) => {
 		res.send(400).send(e);
 	});
@@ -44,6 +65,22 @@ app.get('/todos/:id', (req, res) => {
 		} else {
 			res.status(200).send({todo});
 		}
+	}).catch((e) => {
+		res.status(400).send();
+	});
+});
+
+app.get('jokes/:id', (req, res) => {
+	var {id} = req.params;
+	if(!ObjectID.isValid(id)){
+		console.log('ID not valid');
+		res.status(404).send();
+	}
+	Joke.findById(id).then((joke) => {
+		if(!joke){
+			res.status(404).send();
+		}
+		res.status(200).send({joke});
 	}).catch((e) => {
 		res.status(400).send();
 	});
@@ -67,6 +104,21 @@ app.delete('/todos/:id', (req, res) => {
 	});
 });
 
+app.delete('jokes/:id', (req, res) => {
+	var {id} = req.params;
+	if(!ObjectID.isValid(id)){
+		console.log('ID not valid');
+		res.status(404).send();
+	}
+	Joke.findByIdAndRemove(id).then((joke) => {
+		if(!joke){
+			res.status(400).send();
+		}
+		res.status(200).send({joke});
+	}).catch((e) => {
+		res.status(400).send();
+	});
+});
 
 app.patch('/todos/:id', (req,res) => {
 	var {id} = req.params;
@@ -75,14 +127,12 @@ app.patch('/todos/:id', (req,res) => {
 		console.log('ID not valid');
 		res.status(404).send();
 	}
-
 	if(_.isBoolean(body.completed) && body.completed){
 		body.completedAt = new Date().getTime();
 	} else{
 		body.completed = false;
 		body.completedAt = null;
 	}
-
 	Todo.findByIdAndUpdate(id, {$set: body}, {new: true}).then((todo) =>{
 		if(!todo){
 			return res.status(400).send();
@@ -93,6 +143,22 @@ app.patch('/todos/:id', (req,res) => {
 	})
 });
 
+app.patch('/jokes/:id', (req, res) => {
+	var {id} = req.params;
+	var body = _.pick(req.body, ['text', 'funny']);
+	if(!ObjectID.isValid(id)){
+		console.log('ID not valid');
+		res.status(404).send();
+	}
+	Todo.findByIdAndUpdate(id, {$set: body}, {new:true}).then((joke) => {
+		if(!joke){
+			res.status(400).send();
+		}
+		res.status(200).send({joke});
+	}).catch((e) => {
+		res.status(400).send();
+	});
+});
 
 app.listen(port, () => {
 	console.log('started on port', port);
